@@ -260,76 +260,81 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                             height: 12,
                           ),
                           Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "Main Light Bulb",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.blue,
-                                    fontSize: 16,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Main Light Bulb",
+                                maxLines: 2,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.blue,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Status : ",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                      fontSize: 14,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 8,),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Status : ",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                      ),
+                                  Text(
+                                    "ON",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.amber,
+                                      fontSize: 14,
                                     ),
-                                    Text(
-                                      "ON",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.amber,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10 ,),
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      padding:
-                                          MaterialStateProperty.resolveWith(
-                                              (states) => EdgeInsets.all(8)),
-                                      shape: MaterialStateProperty.resolveWith(
-                                          (states) => RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              )),
-                                      backgroundColor:
-                                          MaterialStateProperty.resolveWith(
-                                              (states) => Colors.blue),
-                                    ),
-                                    child: Text(
-                                      "Turn Off",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    onPressed: () {},
                                   ),
-                                ),
-                                SizedBox(height: 8,),
-                                Text(
-                                  "On for last 3 Hours",
-                                  style: TextStyle(
-                                    color: Colors.grey.shade400,
-                                    fontSize: 12,
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    padding: MaterialStateProperty.resolveWith(
+                                        (states) => EdgeInsets.all(8)),
+                                    shape: MaterialStateProperty.resolveWith(
+                                        (states) => RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            )),
+                                    backgroundColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => Colors.blue),
                                   ),
+                                  child: Text(
+                                    "Turn Off",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onPressed: () {},
                                 ),
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                "On for last 3 Hours",
+                                style: TextStyle(
+                                  color: Colors.grey.shade400,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     );
@@ -337,11 +342,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   itemCount: 2,
                   gridDelegate:
                       SliverStaggeredGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                        staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-                        staggeredTileCount: 2,
-                        crossAxisSpacing: 10
-                  ),
+                          crossAxisCount: 2,
+                          staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+                          staggeredTileCount: 2,
+                          crossAxisSpacing: 10),
                   shrinkWrap: true,
                 ),
                 SizedBox(
