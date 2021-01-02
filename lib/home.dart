@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iot_starbhak_client/account.dart';
 import 'package:iot_starbhak_client/info.dart';
@@ -102,7 +103,8 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.all(Radius.circular(1000)),
                       child: FittedBox(
                         fit: BoxFit.fill,
-                        child: Image.network("https://firebasestorage.googleapis.com/v0/b/health-shelter.appspot.com/o/800px-Image_created_with_a_mobile_phone.png?alt=media&token=5461c81c-7aae-4dd5-b43b-c8c7a82bad44"),
+                        child: Image.network(
+                            "https://firebasestorage.googleapis.com/v0/b/health-shelter.appspot.com/o/800px-Image_created_with_a_mobile_phone.png?alt=media&token=5461c81c-7aae-4dd5-b43b-c8c7a82bad44"),
                       ),
                     ),
                   ),
@@ -233,13 +235,10 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
             ),
             Column(
               children: [
-                GridView.builder(
+                StaggeredGridView.builder(
                   controller: scrollController,
                   itemBuilder: (context, index) {
                     return Container(
-                      margin: (index % 2) == 0
-                          ? EdgeInsets.only(right: 10)
-                          : EdgeInsets.only(left: 10),
                       padding:
                           EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                       decoration: BoxDecoration(
@@ -258,10 +257,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                             size: 50,
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 12,
                           ),
-                          Expanded(
-                            child: Column(
+                          Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -274,6 +272,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                     fontSize: 16,
                                   ),
                                 ),
+                                SizedBox(height: 8,),
                                 Row(
                                   children: [
                                     Text(
@@ -294,6 +293,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                     ),
                                   ],
                                 ),
+                                SizedBox(height: 10 ,),
                                 Container(
                                   width: MediaQuery.of(context).size.width,
                                   child: ElevatedButton(
@@ -320,6 +320,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                     onPressed: () {},
                                   ),
                                 ),
+                                SizedBox(height: 8,),
                                 Text(
                                   "On for last 3 Hours",
                                   style: TextStyle(
@@ -329,14 +330,18 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                                 ),
                               ],
                             ),
-                          )
                         ],
                       ),
                     );
                   },
                   itemCount: 2,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2),
+                  gridDelegate:
+                      SliverStaggeredGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                        staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+                        staggeredTileCount: 2,
+                        crossAxisSpacing: 10
+                  ),
                   shrinkWrap: true,
                 ),
                 SizedBox(
@@ -506,7 +511,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
           child: Drawer(
             elevation: 0,
             child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: 10,),
+              padding: EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
               children: [
                 DrawerHeader(
                   child: Center(
@@ -535,8 +542,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                 ),
                 ListTile(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
-                  ),
+                      borderRadius: BorderRadius.circular(10)),
                   onTap: () {
                     logoAnimationController.reverse();
                     Navigator.pop(context);
