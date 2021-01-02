@@ -133,7 +133,8 @@ class InfoState extends State<Info> {
                                     (states) => EdgeInsets.all(10)),
                                 shape: MaterialStateProperty.resolveWith(
                                     (states) => RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(5),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                         )),
                                 backgroundColor:
                                     MaterialStateProperty.resolveWith(

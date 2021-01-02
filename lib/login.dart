@@ -140,10 +140,14 @@ class LoginState extends State<Login> {
                       ),
                       ElevatedButton(
                         style: ButtonStyle(
-                          padding: MaterialStateProperty.resolveWith((states) => EdgeInsets.all(8)),
-                          shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),)),
-                          backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.blue),
+                          padding: MaterialStateProperty.resolveWith(
+                              (states) => EdgeInsets.all(8)),
+                          shape: MaterialStateProperty.resolveWith(
+                              (states) => RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  )),
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                              (states) => Colors.blue),
                         ),
                         child: Text(
                           "Masuk",

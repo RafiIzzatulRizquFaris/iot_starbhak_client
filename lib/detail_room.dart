@@ -286,14 +286,13 @@ class DetailRoomState extends State<DetailRoom> {
                         child: ElevatedButton(
                           style: ButtonStyle(
                             padding: MaterialStateProperty.resolveWith(
-                                    (states) => EdgeInsets.all(8)),
+                                (states) => EdgeInsets.all(8)),
                             shape: MaterialStateProperty.resolveWith(
-                                    (states) => RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                )),
-                            backgroundColor:
-                            MaterialStateProperty.resolveWith(
-                                    (states) => Colors.blue),
+                                (states) => RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    )),
+                            backgroundColor: MaterialStateProperty.resolveWith(
+                                (states) => Colors.blue),
                           ),
                           child: Text(
                             "Turn Off",
