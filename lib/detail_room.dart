@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
-class DetailRoom extends StatefulWidget{
+class DetailRoom extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return DetailRoomState();
   }
-
 }
 
-class DetailRoomState extends State<DetailRoom>{
+class DetailRoomState extends State<DetailRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,126 +71,144 @@ class DetailRoomState extends State<DetailRoom>{
                         autovalidateMode: AutovalidateMode.always,
                         child: Container(
                             child: SingleChildScrollView(
-                              controller: scrollController,
-                              padding: EdgeInsets.all(20),
-                              reverse: true,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .viewInsets
-                                            .top),
-                                  ),
-                                  Text(
-                                    "Add New Device",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Enter Device's Name",
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 8,),
-                                  TextFormField(
-                                    decoration: InputDecoration(
-                                      hintText: "Device's name",
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                  SizedBox(height: 15,),
-                                  Text(
-                                    "Select Device's Icon",
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 8,),
-                                  GridView.builder(
-                                    controller: scrollController,
-                                    itemBuilder: (context, index) {
-                                      return Container(
-                                        alignment: Alignment.center,
-                                        margin: EdgeInsets.only(right: 10, left: 10, bottom: 10, top: 10),
-                                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.blue,
-                                            style: BorderStyle.solid,
-                                          ),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Expanded(
-                                              child: Icon(
-                                                Icons.lightbulb_outline,
-                                                color: Colors.blue,
-                                                size: 40,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10,
-                                            ),
-                                            Text(
-                                              "Bathroom",
-                                              maxLines: 1,
-                                              softWrap: false,
-                                              overflow: TextOverflow.fade,
-                                              style: TextStyle(fontSize: 14, color: Colors.blue),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    itemCount: 6,
-                                    gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                                    shrinkWrap: true,
-                                  ),
-                                  SizedBox(height: 15,),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    child: ElevatedButton(
-                                      style: ButtonStyle(
-                                        padding: MaterialStateProperty.resolveWith((states) => EdgeInsets.all(8)),
-                                        shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(5),)),
-                                        backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.blue),
-                                      ),
-                                      child: Text(
-                                        "Save",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 22,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom),
-                                  ),
-                                ],
+                          controller: scrollController,
+                          padding: EdgeInsets.all(20),
+                          reverse: true,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    bottom:
+                                        MediaQuery.of(context).viewInsets.top),
                               ),
-                            )
-                        ),
+                              Text(
+                                "Add New Device",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                "Enter Device's Name",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "Device's name",
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text(
+                                "Select Device's Icon",
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              StaggeredGridView.builder(
+                                controller: scrollController,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.blue,
+                                        style: BorderStyle.solid,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Icon(
+                                          Icons.lightbulb_outline,
+                                          color: Colors.blue,
+                                          size: 40,
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          "Bathroom",
+                                          maxLines: 1,
+                                          softWrap: false,
+                                          overflow: TextOverflow.fade,
+                                          style: TextStyle(
+                                              fontSize: 14, color: Colors.blue),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                itemCount: 6,
+                                gridDelegate:
+                                    SliverStaggeredGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  staggeredTileBuilder: (index) =>
+                                      StaggeredTile.fit(1),
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 10,
+                                  staggeredTileCount: 6,
+                                ),
+                                shrinkWrap: true,
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    padding: MaterialStateProperty.resolveWith(
+                                        (states) => EdgeInsets.all(8)),
+                                    shape: MaterialStateProperty.resolveWith(
+                                        (states) => RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            )),
+                                    backgroundColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) => Colors.blue),
+                                  ),
+                                  child: Text(
+                                    "Save",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom),
+                              ),
+                            ],
+                          ),
+                        )),
                       );
                     },
                   );
@@ -202,15 +220,11 @@ class DetailRoomState extends State<DetailRoom>{
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: GridView.builder(
+        child: StaggeredGridView.builder(
           itemBuilder: (context, index) {
             return Container(
               alignment: Alignment.center,
-              margin: (index % 2) == 0
-                  ? EdgeInsets.only(right: 10, bottom: 10, top: 10)
-                  : EdgeInsets.only(left: 10, bottom: 10, top: 10),
-              padding:
-              EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.blue,
@@ -226,82 +240,88 @@ class DetailRoomState extends State<DetailRoom>{
                     size: 50,
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 12,
                   ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Main Light Bulb",
-                          maxLines: 2,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.blue,
-                            fontSize: 16,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Main Light Bulb",
+                        maxLines: 2,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.blue,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Status : ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Status : ",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                                fontSize: 14,
-                              ),
+                          Text(
+                            "ON",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.amber,
+                              fontSize: 14,
                             ),
-                            Text(
-                              "ON",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.amber,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              padding:
-                              MaterialStateProperty.resolveWith(
-                                      (states) => EdgeInsets.all(8)),
-                              shape: MaterialStateProperty.resolveWith(
-                                      (states) => RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(5),
-                                  )),
-                              backgroundColor:
-                              MaterialStateProperty.resolveWith(
-                                      (states) => Colors.blue),
-                            ),
-                            child: Text(
-                              "Turn Off",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            onPressed: () {},
                           ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.resolveWith(
+                                    (states) => EdgeInsets.all(8)),
+                            shape: MaterialStateProperty.resolveWith(
+                                    (states) => RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                )),
+                            backgroundColor:
+                            MaterialStateProperty.resolveWith(
+                                    (states) => Colors.blue),
+                          ),
+                          child: Text(
+                            "Turn Off",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: () {},
                         ),
-                      ],
-                    ),
-                  )
+                      ),
+                    ],
+                  ),
                 ],
               ),
             );
           },
           itemCount: 11,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
+          gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+            crossAxisCount: 2,
+            staggeredTileCount: 11,
+            staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+          ),
           shrinkWrap: true,
         ),
       ),
     );
   }
-
 }
