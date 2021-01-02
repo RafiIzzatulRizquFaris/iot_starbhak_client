@@ -180,6 +180,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                               ),
                               Text(
                                 "The front door is locked!",
+                                maxLines: 2,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.amber,
@@ -191,6 +192,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                               ),
                               Text(
                                 "Would you like to unlocked it?",
+                                maxLines: 2,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
@@ -199,6 +201,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                               ),
                             ],
                           ),
+                          SizedBox(width: 10,),
                           RawMaterialButton(
                             onPressed: () {},
                             materialTapTargetSize:
