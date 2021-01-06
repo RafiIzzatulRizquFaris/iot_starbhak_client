@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iot_starbhak_client/account.dart';
 import 'package:iot_starbhak_client/info.dart';
+import 'package:iot_starbhak_client/manage_member.dart';
 import 'package:iot_starbhak_client/manage_room.dart';
 import 'package:iot_starbhak_client/member_contract.dart';
 import 'package:iot_starbhak_client/member_model.dart';
@@ -18,14 +19,16 @@ class Home extends StatefulWidget {
   }
 }
 
-class HomeState extends State<Home> with TickerProviderStateMixin implements MemberContractView {
+class HomeState extends State<Home>
+    with TickerProviderStateMixin
+    implements MemberContractView {
   AnimationController logoAnimationController;
   Animation logoAnimation;
   ScrollController scrollController;
   MemberPresenter memberPresenter;
   String _area = "Name";
 
-  HomeState(){
+  HomeState() {
     memberPresenter = MemberPresenter(this);
   }
 
@@ -211,7 +214,9 @@ class HomeState extends State<Home> with TickerProviderStateMixin implements Mem
                               ),
                             ],
                           ),
-                          SizedBox(width: 10,),
+                          SizedBox(
+                            width: 10,
+                          ),
                           RawMaterialButton(
                             onPressed: () {},
                             materialTapTargetSize:
@@ -600,6 +605,12 @@ class HomeState extends State<Home> with TickerProviderStateMixin implements Mem
                 ListTile(
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: ManageMember(),
+                            type: PageTransitionType.leftToRightWithFade,
+                            duration: Duration(milliseconds: 500)));
                   },
                   leading: Icon(
                     Icons.accessibility_rounded,
@@ -649,7 +660,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin implements Mem
 
   @override
   setOnSuccessMemberData(MemberModel memberModel) {
-    if (memberModel.success){
+    if (memberModel.success) {
       setState(() {
         _area = memberModel.message.replaceAll("members", "").trim();
       });
