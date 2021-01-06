@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:iot_starbhak_client/area_contract.dart';
+import 'package:iot_starbhak_client/area_presenter.dart';
 import 'package:iot_starbhak_client/detail_room.dart';
+import 'package:iot_starbhak_client/get_area_model.dart';
+import 'package:iot_starbhak_client/submit_area_model.dart';
 import 'package:page_transition/page_transition.dart';
 
 class ManageRoom extends StatefulWidget {
@@ -11,7 +15,24 @@ class ManageRoom extends StatefulWidget {
   }
 }
 
-class ManageRoomState extends State<ManageRoom> {
+class ManageRoomState extends State<ManageRoom>
+    implements GetAreaContractView, SubmitAreaContractView {
+  AreaPresenter areaPresenter;
+  List<GetAreaResult> listArea = <GetAreaResult>[];
+  bool loading = false;
+
+  ManageRoomState() {
+    areaPresenter =
+        AreaPresenter(getAreaContractView: this, submitAreaContractView: this);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loading = true;
+    areaPresenter.loadAreaData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -220,72 +241,115 @@ class ManageRoomState extends State<ManageRoom> {
           ),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: StaggeredGridView.builder(
-          itemBuilder: (context, index) {
-            return FlatButton(
-              padding: EdgeInsets.zero,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: DetailRoom(), type: PageTransitionType.fade));
-              },
-              child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.blue,
-                    style: BorderStyle.solid,
-                  ),
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.room_preferences_outlined,
-                      color: Colors.white,
-                      size: 70,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      "Bathroom",
-                      maxLines: 1,
-                      softWrap: false,
-                      overflow: TextOverflow.fade,
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      "3 Devices",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white.withAlpha(200),
-                      ),
-                    ),
-                  ],
-                ),
+      body: loading
+          ? Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.blue,
               ),
-            );
-          },
-          itemCount: 10,
-          gridDelegate: SliverStaggeredGridDelegateWithFixedCrossAxisCount(
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            crossAxisCount: 2,
-            staggeredTileCount: 10,
-            staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-          ),
-          shrinkWrap: true,
-        ),
-      ),
+            )
+          : listArea.length > 0
+              ? Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: StaggeredGridView.builder(
+                    itemBuilder: (context, index) {
+                      return FlatButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: DetailRoom(),
+                                  type: PageTransitionType.fade));
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.blue,
+                              style: BorderStyle.solid,
+                            ),
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.room_preferences_outlined,
+                                color: Colors.white,
+                                size: 70,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "Bathroom",
+                                maxLines: 1,
+                                softWrap: false,
+                                overflow: TextOverflow.fade,
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.white),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                "3 Devices",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white.withAlpha(200),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                    itemCount: 10,
+                    gridDelegate:
+                        SliverStaggeredGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      crossAxisCount: 2,
+                      staggeredTileCount: 10,
+                      staggeredTileBuilder: (index) => StaggeredTile.fit(1),
+                    ),
+                    shrinkWrap: true,
+                  ),
+                )
+              : Center(
+                  child: Text(
+                    "There's No Room",
+                  ),
+                ),
     );
+  }
+
+  @override
+  setOnErrorGetAreaData(error) {
+    print(error);
+  }
+
+  @override
+  setOnErrorSubmitAreaData(error) {
+    // TODO: implement setOnErrorSubmitAreaData
+    throw UnimplementedError();
+  }
+
+  @override
+  setOnSuccessGetAreaData(GetAreaModel getAreaModel) {
+    if (getAreaModel.success) {
+      setState(() {
+        listArea = getAreaModel.result;
+        loading = false;
+      });
+    }
+  }
+
+  @override
+  setOnSuccessSubmitAreaData(SubmitAreaModel submitAreaModel) {
+    // TODO: implement setOnSuccessSubmitAreaData
+    throw UnimplementedError();
   }
 }
