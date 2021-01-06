@@ -1,7 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:iot_starbhak_client/member_model.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'constants.dart';
+import 'member_contract.dart';
+import 'member_presenter.dart';
 
 class Account extends StatefulWidget {
   @override
@@ -10,11 +16,26 @@ class Account extends StatefulWidget {
   }
 }
 
-class AccountState extends State<Account> {
+class AccountState extends State<Account> implements MemberContractView {
   final formKey = GlobalKey<FormState>();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  MemberPresenter memberPresenter;
   bool obscureText = true;
+  String _area = "Name";
+  String _name = "Name";
+
+  AccountState(){
+    memberPresenter = MemberPresenter(this);
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    memberPresenter.loadMemberData();
+    initializePreference();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,14 +101,14 @@ class AccountState extends State<Account> {
               ),
             ),
             title: Text(
-              "Quifar",
+              _name,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                   color: Colors.black),
             ),
             subtitle: Text(
-              "Member of Toughput Studio's Home",
+              "Member of $_area's Home",
               style: TextStyle(color: Colors.grey),
             ),
           ),
@@ -349,5 +370,28 @@ class AccountState extends State<Account> {
         );
       },
     );
+  }
+
+  @override
+  setOnErrorMemberData(error) {
+    print(error);
+  }
+
+  @override
+  setOnSuccessMemberData(MemberModel memberModel) {
+    if (memberModel.success){
+      setState(() {
+        _area = memberModel.message.replaceAll("members", "").trim();
+      });
+    } else {
+      print(memberModel.message);
+    }
+  }
+
+  void initializePreference() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      _name = preferences.getString(Constants.NAME);
+    });
   }
 }
