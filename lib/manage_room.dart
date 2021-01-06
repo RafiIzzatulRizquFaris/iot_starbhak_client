@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:iot_starbhak_client/area_contract.dart';
 import 'package:iot_starbhak_client/area_presenter.dart';
+import 'package:iot_starbhak_client/constants.dart';
 import 'package:iot_starbhak_client/detail_room.dart';
 import 'package:iot_starbhak_client/get_area_model.dart';
 import 'package:iot_starbhak_client/submit_area_model.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ManageRoom extends StatefulWidget {
   @override
@@ -17,8 +19,11 @@ class ManageRoom extends StatefulWidget {
 
 class ManageRoomState extends State<ManageRoom>
     implements GetAreaContractView, SubmitAreaContractView {
-  AreaPresenter areaPresenter;
+  final formKey = GlobalKey<FormState>();
   List<GetAreaResult> listArea = <GetAreaResult>[];
+  TextEditingController roomNameController = TextEditingController();
+  Constants constants = Constants();
+  AreaPresenter areaPresenter;
   bool loading = false;
 
   ManageRoomState() {
@@ -91,147 +96,168 @@ class ManageRoomState extends State<ManageRoom>
                     ),
                     builder: (BuildContext context) {
                       return Form(
+                        key: formKey,
                         autovalidateMode: AutovalidateMode.always,
                         child: Container(
-                            child: SingleChildScrollView(
-                          controller: scrollController,
-                          padding: EdgeInsets.all(20),
-                          reverse: true,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
+                          child: SingleChildScrollView(
+                            controller: scrollController,
+                            padding: EdgeInsets.all(20),
+                            reverse: true,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
                                     bottom:
-                                        MediaQuery.of(context).viewInsets.top),
-                              ),
-                              Text(
-                                "Add New Room",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                "Enter Room's Name",
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: "Room's name",
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Text(
-                                "Select Room's Icon",
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              StaggeredGridView.builder(
-                                controller: scrollController,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 20),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.blue,
-                                        style: BorderStyle.solid,
-                                      ),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Icon(
-                                          Icons.room_preferences_outlined,
-                                          color: Colors.blue,
-                                          size: 40,
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Bathroom",
-                                          maxLines: 1,
-                                          softWrap: false,
-                                          overflow: TextOverflow.fade,
-                                          style: TextStyle(
-                                              fontSize: 14, color: Colors.blue),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                itemCount: 6,
-                                gridDelegate:
-                                    SliverStaggeredGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  crossAxisCount: 3,
-                                  staggeredTileCount: 6,
-                                  staggeredTileBuilder: (index) =>
-                                      StaggeredTile.fit(1),
-                                ),
-                                shrinkWrap: true,
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    padding: MaterialStateProperty.resolveWith(
-                                        (states) => EdgeInsets.all(8)),
-                                    shape: MaterialStateProperty.resolveWith(
-                                        (states) => RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            )),
-                                    backgroundColor:
-                                        MaterialStateProperty.resolveWith(
-                                            (states) => Colors.blue),
+                                        MediaQuery.of(context).viewInsets.top,
                                   ),
-                                  child: Text(
-                                    "Save",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22,
-                                    ),
+                                ),
+                                Text(
+                                  "Add New Room",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20,
                                   ),
-                                  onPressed: () {
-                                    Navigator.pop(context);
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  "Enter Room's Name",
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                TextFormField(
+                                  autovalidateMode: AutovalidateMode.always,
+                                  controller: roomNameController,
+                                  validator: (value) {
+                                    if (value.isEmpty) {
+                                      return "Room's name cannot be empty";
+                                    }
+                                    return null;
                                   },
+                                  decoration: InputDecoration(
+                                    hintText: "Room's name",
+                                    border: OutlineInputBorder(),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom),
-                              ),
-                            ],
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Text(
+                                  "Select Room's Icon",
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                StaggeredGridView.builder(
+                                  controller: scrollController,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 20),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.blue,
+                                          style: BorderStyle.solid,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Icon(
+                                            Icons.room_preferences_outlined,
+                                            color: Colors.blue,
+                                            size: 40,
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            "Bathroom",
+                                            maxLines: 1,
+                                            softWrap: false,
+                                            overflow: TextOverflow.fade,
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.blue),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  itemCount: 6,
+                                  gridDelegate:
+                                      SliverStaggeredGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10,
+                                    crossAxisCount: 3,
+                                    staggeredTileCount: 6,
+                                    staggeredTileBuilder: (index) =>
+                                        StaggeredTile.fit(1),
+                                  ),
+                                  shrinkWrap: true,
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      padding:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => EdgeInsets.all(8)),
+                                      shape: MaterialStateProperty.resolveWith(
+                                          (states) => RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              )),
+                                      backgroundColor:
+                                          MaterialStateProperty.resolveWith(
+                                              (states) => Colors.blue),
+                                    ),
+                                    child: Text(
+                                      "Save",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22,
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      if (formKey.currentState.validate()) {
+                                        await constants
+                                            .progressDialog(context)
+                                            .show();
+                                        areaPresenter.submitLoadAreaData(
+                                            name: roomNameController.text
+                                                .trim()
+                                                .toString());
+                                      } else {}
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: MediaQuery.of(context)
+                                          .viewInsets
+                                          .bottom),
+                                ),
+                              ],
+                            ),
                           ),
-                        )),
+                        ),
                       );
                     },
                   );
@@ -284,7 +310,7 @@ class ManageRoomState extends State<ManageRoom>
                                 height: 10,
                               ),
                               Text(
-                                "Bathroom",
+                                listArea[index].name,
                                 maxLines: 1,
                                 softWrap: false,
                                 overflow: TextOverflow.fade,
@@ -294,25 +320,25 @@ class ManageRoomState extends State<ManageRoom>
                               SizedBox(
                                 height: 8,
                               ),
-                              Text(
-                                "3 Devices",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.white.withAlpha(200),
-                                ),
-                              ),
+                              // Text(
+                              //   "3 Devices",
+                              //   style: TextStyle(
+                              //     fontSize: 16,
+                              //     color: Colors.white.withAlpha(200),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
                       );
                     },
-                    itemCount: 10,
+                    itemCount: listArea.length,
                     gridDelegate:
                         SliverStaggeredGridDelegateWithFixedCrossAxisCount(
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
                       crossAxisCount: 2,
-                      staggeredTileCount: 10,
+                      staggeredTileCount: listArea.length,
                       staggeredTileBuilder: (index) => StaggeredTile.fit(1),
                     ),
                     shrinkWrap: true,
@@ -332,9 +358,42 @@ class ManageRoomState extends State<ManageRoom>
   }
 
   @override
-  setOnErrorSubmitAreaData(error) {
-    // TODO: implement setOnErrorSubmitAreaData
-    throw UnimplementedError();
+  setOnErrorSubmitAreaData(error) async {
+    print(error);
+    await constants.progressDialog(context).hide();
+    Alert(
+      context: context,
+      title: "Failed",
+      desc: "Failed to Add New Room",
+      type: AlertType.warning,
+      buttons: [
+        DialogButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            "OK",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+      ],
+      style: AlertStyle(
+        animationType: AnimationType.grow,
+        isCloseButton: false,
+        isOverlayTapDismiss: false,
+        descStyle: TextStyle(fontWeight: FontWeight.bold),
+        descTextAlign: TextAlign.center,
+        animationDuration: Duration(milliseconds: 400),
+        alertBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        titleStyle: TextStyle(
+          color: Colors.red,
+        ),
+        alertAlignment: Alignment.center,
+      ),
+    ).show();
   }
 
   @override
@@ -348,8 +407,49 @@ class ManageRoomState extends State<ManageRoom>
   }
 
   @override
-  setOnSuccessSubmitAreaData(SubmitAreaModel submitAreaModel) {
-    // TODO: implement setOnSuccessSubmitAreaData
-    throw UnimplementedError();
+  setOnSuccessSubmitAreaData(SubmitAreaModel submitAreaModel) async {
+    if (submitAreaModel.success) {
+      await constants.progressDialog(context).hide();
+      Navigator.pop(context);
+      setState(() {
+        loading = true;
+      });
+      areaPresenter.loadAreaData();
+    } else {
+      await constants.progressDialog(context).hide();
+      Alert(
+        context: context,
+        title: "Failed",
+        desc: "Failed to Add New Room",
+        type: AlertType.warning,
+        buttons: [
+          DialogButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              "OK",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
+        ],
+        style: AlertStyle(
+          animationType: AnimationType.grow,
+          isCloseButton: false,
+          isOverlayTapDismiss: false,
+          descStyle: TextStyle(fontWeight: FontWeight.bold),
+          descTextAlign: TextAlign.center,
+          animationDuration: Duration(milliseconds: 400),
+          alertBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(
+              color: Colors.grey,
+            ),
+          ),
+          titleStyle: TextStyle(
+            color: Colors.red,
+          ),
+          alertAlignment: Alignment.center,
+        ),
+      ).show();
+    }
   }
 }
