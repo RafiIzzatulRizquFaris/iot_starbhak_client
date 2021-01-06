@@ -2,7 +2,13 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iot_starbhak_client/home.dart';
+import 'package:iot_starbhak_client/login_contract.dart';
+import 'package:iot_starbhak_client/login_model.dart';
+import 'package:iot_starbhak_client/login_presenter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'constants.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -11,12 +17,18 @@ class Login extends StatefulWidget {
   }
 }
 
-class LoginState extends State<Login> {
+class LoginState extends State<Login> implements LoginContractView {
   final formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  Constants constants;
+  LoginPresenter loginPresenter;
   bool obscureText = true;
   bool loadingLogin = false;
+
+  LoginState(){
+    loginPresenter = LoginPresenter(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +92,7 @@ class LoginState extends State<Login> {
                       ),
                       TextFormField(
                         controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           hintText: "Email",
                           prefixIcon: Icon(Icons.person_outline_rounded),
@@ -104,6 +117,7 @@ class LoginState extends State<Login> {
                       TextFormField(
                         controller: passwordController,
                         obscureText: obscureText,
+                        keyboardType: TextInputType.visiblePassword,
                         validator: (value) {
                           if (value.isEmpty) {
                             return "Password cannot be empty";
@@ -158,21 +172,14 @@ class LoginState extends State<Login> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              child: Home(),
-                              type: PageTransitionType.bottomToTop,
-                              duration: Duration(seconds: 1),
-                            ),
-                          );
-                          // if (formKey.currentState.validate()) {
-                          //   setState(() {
-                          //     loadingLogin = true;
-                          //   });
-                          // } else {
-                          //   // TODO: error
-                          // }
+                          if (formKey.currentState.validate()) {
+                            setState(() {
+                              loadingLogin = true;
+                            });
+                            loginPresenter.loadLoginData(emailController.text.trim().toString(), passwordController.text.trim().toString());
+                          } else {
+                            // TODO: error
+                          }
                         },
                       ),
                       Row(
@@ -214,5 +221,40 @@ class LoginState extends State<Login> {
               ),
             ),
     );
+  }
+
+  @override
+  setOnErrorLoginData(error) async {
+    setState(() {
+      loadingLogin = false;
+    });
+    print(error);
+    constants.errorAlert("Failed To Login", "Please Check Your Internet Connection", context);
+  }
+
+  @override
+  setOnSuccessLoginData(LoginModel loginModel) async {
+    if (loginModel.success){
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString(Constants.TOKEN, loginModel.result.member_token);
+      preferences.setString(Constants.NAME, loginModel.result.username);
+      setState(() {
+        loadingLogin = false;
+      });
+      Navigator.push(
+        context,
+        PageTransition(
+          child: Home(),
+          type: PageTransitionType.bottomToTop,
+          duration: Duration(seconds: 1),
+        ),
+      );
+    } else {
+      setState(() {
+        loadingLogin = false;
+      });
+      print(loginModel.message);
+      constants.errorAlert("Failed To Login", loginModel.message, context);
+    }
   }
 }
