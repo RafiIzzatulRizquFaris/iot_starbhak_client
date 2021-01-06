@@ -6,6 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iot_starbhak_client/account.dart';
 import 'package:iot_starbhak_client/info.dart';
 import 'package:iot_starbhak_client/manage_room.dart';
+import 'package:iot_starbhak_client/member_contract.dart';
+import 'package:iot_starbhak_client/member_model.dart';
+import 'package:iot_starbhak_client/member_presenter.dart';
 import 'package:page_transition/page_transition.dart';
 
 class Home extends StatefulWidget {
@@ -15,10 +18,16 @@ class Home extends StatefulWidget {
   }
 }
 
-class HomeState extends State<Home> with TickerProviderStateMixin {
+class HomeState extends State<Home> with TickerProviderStateMixin implements MemberContractView {
   AnimationController logoAnimationController;
   Animation logoAnimation;
   ScrollController scrollController;
+  MemberPresenter memberPresenter;
+  String _area = "Name";
+
+  HomeState(){
+    memberPresenter = MemberPresenter(this);
+  }
 
   @override
   void initState() {
@@ -35,6 +44,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     );
     super.initState();
     scrollController = ScrollController();
+    memberPresenter.loadMemberData();
   }
 
   @override
@@ -146,7 +156,7 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Welcome To\nToughput Studio's Home",
+                      "Welcome To\n$_area's Place",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -630,5 +640,21 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  @override
+  setOnErrorMemberData(error) {
+    print(error);
+  }
+
+  @override
+  setOnSuccessMemberData(MemberModel memberModel) {
+    if (memberModel.success){
+      setState(() {
+        _area = memberModel.message.replaceAll("members", "").trim();
+      });
+    } else {
+      print(memberModel.message);
+    }
   }
 }
