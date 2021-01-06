@@ -10,6 +10,9 @@ class Constants {
   static const kTextLightColor = Color(0xFF747474);
   static const kBlueColor = Color(0xFF40BAD5);
 
+  static const String TOKEN = "TOKEN";
+  static const String NAME = "NAME";
+
   static const kDefaultPadding = 20.0;
 
   static const kDefaultShadow = BoxShadow(
