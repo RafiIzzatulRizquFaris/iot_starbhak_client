@@ -6,6 +6,7 @@ import 'package:iot_starbhak_client/login_contract.dart';
 import 'package:iot_starbhak_client/login_model.dart';
 import 'package:iot_starbhak_client/login_presenter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
@@ -229,7 +230,39 @@ class LoginState extends State<Login> implements LoginContractView {
       loadingLogin = false;
     });
     print(error);
-    constants.errorAlert("Failed To Login", "Please Check Your Internet Connection", context);
+    Alert(
+      context: context,
+      title: "Failed to Login",
+      desc: "Please Check Your Internet Connection",
+      type: AlertType.warning,
+      buttons: [
+        DialogButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            "OK",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+      ],
+      style: AlertStyle(
+        animationType: AnimationType.grow,
+        isCloseButton: false,
+        isOverlayTapDismiss: false,
+        descStyle: TextStyle(fontWeight: FontWeight.bold),
+        descTextAlign: TextAlign.center,
+        animationDuration: Duration(milliseconds: 400),
+        alertBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        titleStyle: TextStyle(
+          color: Colors.red,
+        ),
+        alertAlignment: Alignment.center,
+      ),
+    ).show();
   }
 
   @override
@@ -249,12 +282,43 @@ class LoginState extends State<Login> implements LoginContractView {
           duration: Duration(seconds: 1),
         ),
       );
-    } else {
+    } else if (!loginModel.success){
       setState(() {
         loadingLogin = false;
       });
-      print(loginModel.message);
-      constants.errorAlert("Failed To Login", loginModel.message, context);
+      Alert(
+        context: context,
+        title: "Failed to Login",
+        desc: loginModel.message,
+        type: AlertType.warning,
+        buttons: [
+          DialogButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              "OK",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
+        ],
+        style: AlertStyle(
+          animationType: AnimationType.grow,
+          isCloseButton: false,
+          isOverlayTapDismiss: false,
+          descStyle: TextStyle(fontWeight: FontWeight.bold),
+          descTextAlign: TextAlign.center,
+          animationDuration: Duration(milliseconds: 400),
+          alertBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(
+              color: Colors.grey,
+            ),
+          ),
+          titleStyle: TextStyle(
+            color: Colors.red,
+          ),
+          alertAlignment: Alignment.center,
+        ),
+      ).show();
     }
   }
 }
