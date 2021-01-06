@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:iot_starbhak_client/constants.dart';
 import 'package:iot_starbhak_client/login_contract.dart';
 import 'package:iot_starbhak_client/login_model.dart';
 
@@ -12,7 +13,7 @@ class LoginPresenter implements LoginContractPresenter {
   @override
   Future<LoginModel> getLoginData(String email, String password) async {
     Client client = Client();
-    String url = "iot.starbhak.store/api/login";
+    String url = Constants.BASE_URL + "login";
     final response = await client.post(
       url,
       body: {
