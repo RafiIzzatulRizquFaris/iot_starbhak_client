@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -10,6 +11,7 @@ class Constants {
   static const kTextLightColor = Color(0xFF747474);
   static const kBlueColor = Color(0xFF40BAD5);
 
+  static const String BASE_URL = "http://iot.starbhak.store/api/";
   static const String TOKEN = "TOKEN";
   static const String NAME = "NAME";
 
