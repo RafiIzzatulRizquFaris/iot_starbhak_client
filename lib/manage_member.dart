@@ -289,6 +289,14 @@ class ManageMemberState extends State<ManageMember>
                                 DialogButton(
                                   onPressed: () {
                                     Navigator.pop(context);
+                                    setState(() {
+                                      print("delete");
+                                      loading = true;
+                                      manageMemberPresenter
+                                          .loadDeleteMemberData(memberModel
+                                              .result[index].id
+                                              .toString());
+                                    });
                                   },
                                   child: Text(
                                     "yes",

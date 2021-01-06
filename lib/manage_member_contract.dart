@@ -11,4 +11,6 @@ class ManageMemberContractPresenter {
   loadAddMemberData(String email, String password, String username) {}
   getMemberData() {}
   loadMemberData() {}
+  deleteMemberData(String clientId) {}
+  loadDeleteMemberData(String clientId) {}
 }

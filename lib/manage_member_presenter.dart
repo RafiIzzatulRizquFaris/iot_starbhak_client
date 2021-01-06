@@ -64,4 +64,28 @@ class ManageMemberPresenter implements ManageMemberContractPresenter {
         .catchError(
             (error) => manageMemberContractView.setOnErrorMemberData(error));
   }
+
+  @override
+  Future<int> deleteMemberData(String clientId) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String url = Constants.BASE_URL + "member/" + clientId;
+    Client client = Client();
+    final response = await client.delete(
+      url,
+      headers: {
+        HttpHeaders.authorizationHeader:
+            "Bearer " + preferences.getString(Constants.TOKEN),
+      },
+    );
+    print(response.statusCode);
+    return response.statusCode;
+  }
+
+  @override
+  loadDeleteMemberData(String clientId) {
+    deleteMemberData(clientId)
+        .then((value) => manageMemberContractView.setOnSuccessAddMember())
+        .catchError(
+            (error) => manageMemberContractView.setOnErrorMemberData(error));
+  }
 }
