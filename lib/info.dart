@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:iot_starbhak_client/member_contract.dart';
+import 'package:iot_starbhak_client/member_model.dart';
+import 'package:iot_starbhak_client/member_presenter.dart';
+import 'string_extension.dart';
 
 class Info extends StatefulWidget {
   @override
@@ -9,7 +13,24 @@ class Info extends StatefulWidget {
   }
 }
 
-class InfoState extends State<Info> {
+class InfoState extends State<Info> implements MemberContractView{
+
+  MemberPresenter memberPresenter;
+  bool isLoading = false;
+  String placeName = "Place Name";
+  String membership = "Membership";
+
+  InfoState(){
+    memberPresenter = MemberPresenter(this);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    isLoading = true;
+    memberPresenter.loadMemberData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +73,11 @@ class InfoState extends State<Info> {
           ),
         ),
       ),
-      body: Container(
+      body: isLoading ? Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.blue,
+        ),
+      ) : Container(
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -91,7 +116,7 @@ class InfoState extends State<Info> {
                             height: 12,
                           ),
                           Text(
-                            "Toughput Studio's Home",
+                            "$placeName's Home",
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: TextStyle(
@@ -115,7 +140,7 @@ class InfoState extends State<Info> {
                             height: 5,
                           ),
                           Text(
-                            "Business Membership",
+                            membership,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.amber,
@@ -177,5 +202,21 @@ class InfoState extends State<Info> {
         ),
       ),
     );
+  }
+
+  @override
+  setOnErrorMemberData(error) {
+    print(error);
+  }
+
+  @override
+  setOnSuccessMemberData(MemberModel memberModel) {
+    if (memberModel.success){
+      setState(() {
+        placeName = memberModel.message.replaceAll("members", "").trim();
+        membership = memberModel.service.type.capitalize();
+        isLoading = false;
+      });
+    }
   }
 }
