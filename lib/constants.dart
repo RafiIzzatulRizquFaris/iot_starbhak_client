@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iot_starbhak_client/device_model.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -22,6 +23,14 @@ class Constants {
     blurRadius: 27,
     color: Colors.black12,
   );
+
+  List<String> getListDevice(List<DeviceResult> deviceResult) {
+    List<String> list = <String>[];
+    for (int i = 0; i < deviceResult.length; i++) {
+      list.add(deviceResult[i].name);
+    }
+    return list;
+  }
 
   ProgressDialog progressDialog(BuildContext ctx) {
     ProgressDialog loadingDialog = ProgressDialog(
