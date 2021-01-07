@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:iot_starbhak_client/manage_member_contract.dart';
@@ -130,10 +131,14 @@ class ManageMemberState extends State<ManageMember>
                                 ),
                                 TextFormField(
                                   autovalidateMode: AutovalidateMode.always,
+                                  keyboardType: TextInputType.emailAddress,
                                   controller: memberEmail,
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       return "Email Cannot Be empty";
+                                    } else if (!EmailValidator.validate(
+                                        value)) {
+                                      return "Wrong Email Format";
                                     }
                                     return null;
                                   },
@@ -185,9 +190,12 @@ class ManageMemberState extends State<ManageMember>
                                 TextFormField(
                                   autovalidateMode: AutovalidateMode.always,
                                   controller: memberPassword,
+                                  keyboardType: TextInputType.visiblePassword,
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      return "password Cannot Be empty";
+                                      return "Password Cannot Be empty";
+                                    } else if (value.length < 8) {
+                                      return "Password less than 8 characters";
                                     }
                                     return null;
                                   },
@@ -224,15 +232,19 @@ class ManageMemberState extends State<ManageMember>
                                       ),
                                     ),
                                     onPressed: () {
-                                      print(memberEmail.value.text);
-                                      print(memberName.value.text);
-                                      print(memberPassword.value.text);
                                       setState(() {
                                         loading = true;
                                         manageMemberPresenter.loadAddMemberData(
-                                            memberEmail.value.text,
-                                            memberPassword.value.text,
-                                            memberName.value.text);
+                                          memberEmail.value.text
+                                              .trim()
+                                              .toString(),
+                                          memberPassword.value.text
+                                              .trim()
+                                              .toString(),
+                                          memberName.value.text
+                                              .trim()
+                                              .toString(),
+                                        );
                                       });
                                     },
                                   ),
@@ -272,8 +284,8 @@ class ManageMemberState extends State<ManageMember>
                           onLongPress: () {
                             Alert(
                               context: context,
-                              title: "Yakin Menghapus",
-                              desc: "Yakin nggaak Nih",
+                              title: "Delete Member",
+                              desc: "Are you sure you want to delete this member?",
                               type: AlertType.warning,
                               buttons: [
                                 DialogButton(
@@ -281,7 +293,7 @@ class ManageMemberState extends State<ManageMember>
                                     Navigator.pop(context);
                                   },
                                   child: Text(
-                                    "no",
+                                    "Cancel",
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 20),
                                   ),
@@ -299,7 +311,7 @@ class ManageMemberState extends State<ManageMember>
                                     });
                                   },
                                   child: Text(
-                                    "yes",
+                                    "Delete",
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 20),
                                   ),
@@ -387,7 +399,6 @@ class ManageMemberState extends State<ManageMember>
 
   @override
   setOnErrorMemberData(error) {
-    // TODO: implement setOnErrorMemberData
     print("error : ${error.toString()}");
   }
 
