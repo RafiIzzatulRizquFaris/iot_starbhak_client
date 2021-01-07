@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:iot_starbhak_client/login.dart';
 import 'package:iot_starbhak_client/member_model.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -164,15 +166,19 @@ class AccountState extends State<Account> implements MemberContractView {
                   DialogButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
-                      "Batal",
+                      "Cancel",
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                     color: Colors.grey,
                   ),
                   DialogButton(
-                    onPressed: () async {},
+                    onPressed: () async {
+                      SharedPreferences preferences = await SharedPreferences.getInstance();
+                      preferences.clear();
+                      Navigator.pushReplacement(context, PageTransition(child: Login(), type: PageTransitionType.fade));
+                    },
                     child: Text(
-                      "Setuju",
+                      "Log Out",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
