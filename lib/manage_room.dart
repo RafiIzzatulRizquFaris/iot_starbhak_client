@@ -284,7 +284,7 @@ class ManageRoomState extends State<ManageRoom>
                           Navigator.push(
                               context,
                               PageTransition(
-                                  child: DetailRoom(),
+                                  child: DetailRoom(idArea: listArea[index].id.toString(), nameArea: listArea[index].name,),
                                   type: PageTransitionType.fade));
                         },
                         child: Container(
