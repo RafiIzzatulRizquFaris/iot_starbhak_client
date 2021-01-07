@@ -49,11 +49,6 @@ class LoginState extends State<Login> implements LoginContractView {
                   child: ListView(
                     shrinkWrap: true,
                     children: [
-                      // Image.asset(
-                      //   'assets/images/logo_ap.png',
-                      //   height: 120,
-                      //   width: 120,
-                      // ),
                       Icon(
                         Icons.sensor_door_rounded,
                         color: Colors.blue,
@@ -274,7 +269,7 @@ class LoginState extends State<Login> implements LoginContractView {
       setState(() {
         loadingLogin = false;
       });
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         PageTransition(
           child: Home(),
