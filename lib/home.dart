@@ -4,6 +4,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iot_starbhak_client/account.dart';
+import 'package:iot_starbhak_client/constants.dart';
+import 'package:iot_starbhak_client/get_usage_contract.dart';
+import 'package:iot_starbhak_client/get_usage_model.dart';
+import 'package:iot_starbhak_client/get_usage_presenter.dart';
 import 'package:iot_starbhak_client/history_screen.dart';
 import 'package:iot_starbhak_client/info.dart';
 import 'package:iot_starbhak_client/manage_member.dart';
@@ -22,15 +26,20 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home>
     with TickerProviderStateMixin
-    implements MemberContractView {
+    implements MemberContractView, GetUsageContractView {
+  Constants constants = Constants();
   AnimationController logoAnimationController;
   Animation logoAnimation;
   ScrollController scrollController;
   MemberPresenter memberPresenter;
+  GetUsagePresenter getUsagePresenter;
   String _area = "Name";
+  String _membershipPrice = "99999999";
+  String _countDevice = "999";
 
   HomeState() {
     memberPresenter = MemberPresenter(this);
+    getUsagePresenter = GetUsagePresenter(this);
   }
 
   @override
@@ -49,6 +58,7 @@ class HomeState extends State<Home>
     super.initState();
     scrollController = ScrollController();
     memberPresenter.loadMemberData();
+    getUsagePresenter.loadGetUsageData();
   }
 
   @override
@@ -429,7 +439,7 @@ class HomeState extends State<Home>
                           Column(
                             children: [
                               Text(
-                                "450",
+                                _countDevice,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -465,7 +475,7 @@ class HomeState extends State<Home>
                             width: 8,
                           ),
                           Text(
-                            "Rp. 400,500.00",
+                            constants.getFormattedMoney(_membershipPrice),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -685,9 +695,24 @@ class HomeState extends State<Home>
     if (memberModel.success) {
       setState(() {
         _area = memberModel.message.replaceAll("members", "").trim();
+        _membershipPrice = memberModel.service.price.toString();
       });
     } else {
       print(memberModel.message);
+    }
+  }
+
+  @override
+  setOnErrorGetUsageData(error) {
+    print(error);
+  }
+
+  @override
+  setOnSuccessGetUsageData(GetUsageModel getUsageModel) {
+    if (getUsageModel.success){
+      setState(() {
+        _countDevice = getUsageModel.result.length.toString();
+      });
     }
   }
 }
