@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:iot_starbhak_client/device_model.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
@@ -23,6 +24,18 @@ class Constants {
     blurRadius: 27,
     color: Colors.black12,
   );
+
+  String getFormattedMoney(String unformattedText) {
+    MoneyMaskedTextController moneyMaskedTextController =
+    MoneyMaskedTextController(
+      thousandSeparator: ",",
+      precision: 0,
+      decimalSeparator: "",
+      initialValue: double.parse(unformattedText),
+      leftSymbol: "Rp. ",
+    );
+    return moneyMaskedTextController.text;
+  }
 
   List<String> getListDevice(List<DeviceResult> deviceResult) {
     List<String> list = <String>[];
