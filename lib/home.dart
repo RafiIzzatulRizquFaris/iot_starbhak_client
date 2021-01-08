@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iot_starbhak_client/account.dart';
+import 'package:iot_starbhak_client/history_screen.dart';
 import 'package:iot_starbhak_client/info.dart';
 import 'package:iot_starbhak_client/manage_member.dart';
 import 'package:iot_starbhak_client/manage_room.dart';
@@ -618,6 +619,27 @@ class HomeState extends State<Home>
                   ),
                   title: Text(
                     "Manage Client Member",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: HistoryScreen(),
+                            type: PageTransitionType.leftToRightWithFade,
+                            duration: Duration(milliseconds: 500)));
+                  },
+                  leading: Icon(
+                    Icons.toc,
+                    size: 30,
+                  ),
+                  title: Text(
+                    "Report Status Device",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                     ),
