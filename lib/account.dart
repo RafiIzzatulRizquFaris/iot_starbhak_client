@@ -345,7 +345,7 @@ class AccountState extends State<Account> implements MemberContractView {
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: FlatButton(
+                      child: TextButton(
                         onPressed: () async {
                           if (formKey.currentState.validate()) {}
                         },
