@@ -27,7 +27,7 @@ class DetailRoomState extends State<DetailRoom>
   GetUsagePresenter getUsagePresenter;
   SwitchDevicePresenter switchDevicePresenter;
   bool isLoading = false;
-  List<Result> listResultUsage = <Result>[];
+  List<GetUsageResult> listResultUsage = <GetUsageResult>[];
 
   DetailRoomState() {
     getUsagePresenter = GetUsagePresenter(this);
@@ -214,11 +214,7 @@ class DetailRoomState extends State<DetailRoom>
                                     ),
                                     onPressed: () {
                                       switchDevicePresenter
-                                          .loadSwitchDeviceData(
-                                              listResultUsage[index]
-                                                  .device_id
-                                                  .toString(),
-                                              widget.idArea);
+                                          .loadSwitchDeviceData(listResultUsage[index].device_id.toString(), widget.idArea);
                                     },
                                   ),
                                 ),
