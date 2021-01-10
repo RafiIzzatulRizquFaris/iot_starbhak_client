@@ -1,6 +1,6 @@
 class GetUsageModel {
     String message;
-    List<Result> result;
+    List<GetUsageResult> result;
     bool success;
 
     GetUsageModel({this.message, this.result, this.success});
@@ -8,7 +8,7 @@ class GetUsageModel {
     factory GetUsageModel.fromJson(Map<String, dynamic> json) {
         return GetUsageModel(
             message: json['message'], 
-            result: json['result'] != null ? (json['result'] as List).map((i) => Result.fromJson(i)).toList() : null, 
+            result: json['result'] != null ? (json['result'] as List).map((i) => GetUsageResult.fromJson(i)).toList() : null, 
             success: json['success'], 
         );
     }
@@ -24,7 +24,7 @@ class GetUsageModel {
     }
 }
 
-class Result {
+class GetUsageResult {
     Area area;
     int area_id;
     int client_id;
@@ -34,10 +34,10 @@ class Result {
     int member_id;
     String status;
 
-    Result({this.area, this.area_id, this.client_id, this.device, this.device_id, this.id, this.member_id, this.status});
+    GetUsageResult({this.area, this.area_id, this.client_id, this.device, this.device_id, this.id, this.member_id, this.status});
 
-    factory Result.fromJson(Map<String, dynamic> json) {
-        return Result(
+    factory GetUsageResult.fromJson(Map<String, dynamic> json) {
+        return GetUsageResult(
             area: json['area'] != null ? Area.fromJson(json['area']) : null, 
             area_id: json['area_id'], 
             client_id: json['client_id'], 
