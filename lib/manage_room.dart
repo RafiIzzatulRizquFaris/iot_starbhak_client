@@ -278,19 +278,29 @@ class ManageRoomState extends State<ManageRoom>
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   child: StaggeredGridView.builder(
                     itemBuilder: (context, index) {
-                      return FlatButton(
-                        padding: EdgeInsets.zero,
+                      return TextButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.resolveWith(
+                              (states) => EdgeInsets.zero),
+                        ),
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: DetailRoom(idArea: listArea[index].id.toString(), nameArea: listArea[index].name,),
-                                  type: PageTransitionType.fade));
+                            context,
+                            PageTransition(
+                              child: DetailRoom(
+                                idArea: listArea[index].id.toString(),
+                                nameArea: listArea[index].name,
+                              ),
+                              type: PageTransitionType.fade,
+                            ),
+                          );
                         },
                         child: Container(
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 20),
+                            vertical: 10,
+                            horizontal: 20,
+                          ),
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Colors.blue,
@@ -320,13 +330,6 @@ class ManageRoomState extends State<ManageRoom>
                               SizedBox(
                                 height: 8,
                               ),
-                              // Text(
-                              //   "3 Devices",
-                              //   style: TextStyle(
-                              //     fontSize: 16,
-                              //     color: Colors.white.withAlpha(200),
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
