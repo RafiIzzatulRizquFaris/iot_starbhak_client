@@ -187,8 +187,10 @@ class LoginState extends State<Login> implements LoginContractView {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          FlatButton(
-                            padding: EdgeInsets.all(0),
+                          TextButton(
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.resolveWith((states) => EdgeInsets.zero),
+                            ),
                             child: Text(
                               "Sign up now",
                               style: TextStyle(
